@@ -4,7 +4,7 @@ import * as Util from './util';
 const canvas = document.getElementById('canvas-container');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-var ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d');
 
 window.addEventListener('resize', () => {
   canvas.height = window.innerHeight;
@@ -12,6 +12,7 @@ window.addEventListener('resize', () => {
   init();
 });
 
+let particleArray;
 const colorArray = [
   "#FF0000",
   "#FFFF00",
@@ -25,8 +26,8 @@ const colorArray = [
   "#800080"
 ];
 
-const particleArray = [];
 const init = () => {
+  particleArray = [];
   for (let i = 0; i < 750; i++) {
     const radius = Math.random() * 7;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
@@ -41,7 +42,15 @@ const init = () => {
 
 const animate = () => {
   requestAnimationFrame(animate);
+  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let grd = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  grd.addColorStop(0, "#010407");
+  grd.addColorStop(0.25, "#061119");
+  grd.addColorStop(0.75, "#061119");
+  grd.addColorStop(1, "#010407");
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   for (var i = 0; i < particleArray.length; i++) {
     particleArray[i].update();
@@ -50,3 +59,5 @@ const animate = () => {
 
 init();
 animate();
+console.log(canvas.width);
+console.log(canvas.height);
