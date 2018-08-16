@@ -1,5 +1,5 @@
 module.exports = {
-  entry: "./js/chromatic.js",
+  entry: "../js/chromatic.js",
   output: {
     filename: "../js/bundle.js"
   },

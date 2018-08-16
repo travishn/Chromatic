@@ -1,11 +1,10 @@
 import Particle from './particle';
 import * as Util from './util';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.querySelector('#canvas-container');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+const canvas = document.getElementById('canvas-container');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+var ctx = canvas.getContext('2d');
 
 const colorArray = [
   "#FF0000",
@@ -20,8 +19,8 @@ const colorArray = [
   "#800080"
 ];
 
+const particleArray = [];
 const init = () => {
-  const particleArray = [];
   for (let i = 0; i < 500; i++) {
     const radius = Math.random() * 7;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
@@ -30,8 +29,18 @@ const init = () => {
     const dy = (Math.random() - 0.5) * 2;
     const color = Util.randomIntFromRange(0, colorArray.length);
 
-    particleArray.push(new Particle(x, y, dx, dy, radius, color));
+    particleArray.push(new Particle(x, y, dx, dy, radius, color, ctx));
+  }
+}
+
+const animate = () => {
+  requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (var i = 0; i < particleArray.length; i++) {
+    particleArray[i].update();
   }
 }
 
 init();
+animate();
