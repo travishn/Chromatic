@@ -6,6 +6,12 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 var ctx = canvas.getContext('2d');
 
+window.addEventListener('resize', () => {
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  init();
+});
+
 const colorArray = [
   "#FF0000",
   "#FFFF00",
@@ -21,13 +27,13 @@ const colorArray = [
 
 const particleArray = [];
 const init = () => {
-  for (let i = 0; i < 500; i++) {
+  for (let i = 0; i < 750; i++) {
     const radius = Math.random() * 7;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
     const y = Math.random() * (canvas.height - radius * 2) + radius;
     const dx = (Math.random() - 0.5) * 2;
     const dy = (Math.random() - 0.5) * 2;
-    const color = Util.randomIntFromRange(0, colorArray.length);
+    const color = colorArray[Util.randomIntFromRange(0, colorArray.length)];
 
     particleArray.push(new Particle(x, y, dx, dy, radius, color, ctx));
   }
