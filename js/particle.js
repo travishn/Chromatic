@@ -46,7 +46,7 @@ class Particle {
       }
     } else {
       if (this.radius > this.minRadius) {
-        this.radius -= 1;
+        this.radius -= 0.5;
       }
     }
 
