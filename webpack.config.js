@@ -1,7 +1,7 @@
 module.exports = {
   entry: "./js/chromatic.js",
   output: {
-    filename: "./js/bundle.js"
+    filename: "../js/bundle.js"
   },
   module: {
     rules: [{
