@@ -40,6 +40,7 @@ class Particle {
       this.dy = -this.dy;
     }
 
+    // Bubble effect
     if (Util.calculateDistance(mouse, this) < 80) {
       if (this.radius < 25) {
         this.radius += 1.5;
@@ -49,6 +50,18 @@ class Particle {
         this.radius -= 0.5;
       }
     }
+
+    //Repulsion effect
+    // if (Util.calculateDistance(mouse, this) < 80) {
+    //   const dx = this.x - mouse.x;
+    //   const dy = this.y - mouse.y;
+    //   const angle = Math.atan2(dy, dx);
+    //   const xRepulsion = Math.cos(angle);
+    //   const yRepulsion = Math.sin(angle);
+    //   const radiusDistance = 80 - Util.calculateDistance(mouse, this);
+    //   this.x += xRepulsion * radiusDistance;
+    //   this.y += yRepulsion * radiusDistance;
+    // }
 
     this.x += this.dx;
     this.y += this.dy;
