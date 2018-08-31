@@ -8,6 +8,19 @@
     <title>Chromatic</title>
   </head>
   <body>
+    <div id="modal">
+      <h1>Chromatic</h1>
+      <p>Created By: Travis Nguyen</p>
+    </div>
+
+    <div id="options">
+      <h2>Number of Particles</h2>
+      <form id="particle-form">
+        <input type="range" name="particlesInput" id="particle-input" value="300" min="100" max="500" oninput="particlesOutput.value = particlesInput.value"></input>
+        <output name="particlesOutput" id="particle-output">300</output>
+      </form>
+    </div>
+
     <canvas id='canvas-container'>
     </canvas>
   </body>

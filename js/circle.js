@@ -4,7 +4,7 @@ class Circle {
     this.y = y;
     this.ctx = ctx;
     this.radius = y * 0.9;
-    this.color = 'transparent';
+    this.color = 'blue';
   }
 
   draw() {

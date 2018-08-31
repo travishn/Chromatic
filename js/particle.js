@@ -76,7 +76,7 @@ class Particle {
       }
     }
 
-    //Repulsion effect
+    // Repulsion effect
     // if (Util.calculateDistance(mouse, this) < 80) {
     //   const dx = this.x - mouse.x;
     //   const dy = this.y - mouse.y;

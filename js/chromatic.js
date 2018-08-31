@@ -12,19 +12,28 @@ window.addEventListener('resize', () => {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
   // init((canvas.height + canvas.width) / 2.5);
-  init(20);
+  init(particleNum);
 });
 
 let particleArray;
+let particleNum = 300;
+let particlesInput = document.getElementById('particle-input');
+particlesInput.addEventListener('change', () => {
+  particleNum = particlesInput.value;
+  init(particleNum);
+});
+
+
+
 
 const init = (num) => {
   particleArray = [];
   for (let i = 0; i < num; i++) {
     const radius = Math.random() * 3 + 3;
-    // const x = Math.random() * (canvas.width - radius * 2) + radius;
-    // const y = Math.random() * (canvas.height - radius * 2) + radius;
-    const x = Util.randomIntFromRange(canvas.width/2 - circleContainer.x, canvas.width/2 + circleContainer.x)
-    const y = Util.randomIntFromRange(canvas.height/2 - circleContainer.y, canvas.height/2 + circleContainer.y)
+    const x = Math.random() * (canvas.width - radius * 2) + radius;
+    const y = Math.random() * (canvas.height - radius * 2) + radius;
+    // const x = Util.randomIntFromRange(canvas.width/2 - circleContainer.x, canvas.width/2 + circleContainer.x)
+    // const y = Util.randomIntFromRange(canvas.height/2 - circleContainer.y, canvas.height/2 + circleContainer.y)
     const dx = (Math.random() - 0.5);
     const dy = (Math.random() - 0.5);
 
@@ -59,8 +68,8 @@ const animate = () => {
     drawLines(particleArray[i]);
   }
 
-  circleContainer.draw();
+  // circleContainer.draw();
 }
 
-init(300);
+init(particleNum);
 animate();
