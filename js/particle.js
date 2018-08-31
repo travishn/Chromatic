@@ -10,6 +10,14 @@ window.addEventListener('mousemove', (event) => {
   mouse.y = event.y;
 });
 
+let effects = {bubble: false, repulse: false}
+window.addEventListener('click', (e) => {
+  if (e.target.type === 'checkbox') {
+    effects[e.target.id] = e.target.checked;
+    console.log(e.target.checked);
+  }
+});
+
 class Particle {
   constructor(x, y, dx, dy, radius, ctx) {
     this.x = this.oldX = x;
@@ -65,8 +73,7 @@ class Particle {
     //   this.dy = -this.dy;
     // }
 
-    // Bubble effect
-    if (Util.calculateDistance(mouse, this) < 80) {
+    if (Util.calculateDistance(mouse, this) < 80 && effects['bubble'] === true) {
       if (this.radius < 25) {
         this.radius += 1.5;
       }
@@ -76,17 +83,16 @@ class Particle {
       }
     }
 
-    // Repulsion effect
-    // if (Util.calculateDistance(mouse, this) < 80) {
-    //   const dx = this.x - mouse.x;
-    //   const dy = this.y - mouse.y;
-    //   const angle = Math.atan2(dy, dx);
-    //   const xRepulsion = Math.cos(angle);
-    //   const yRepulsion = Math.sin(angle);
-    //   const radiusDistance = 80 - Util.calculateDistance(mouse, this);
-    //   this.x += xRepulsion * radiusDistance;
-    //   this.y += yRepulsion * radiusDistance;
-    // }
+    if (Util.calculateDistance(mouse, this) < 80 && effects['repulse'] === true) {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const angle = Math.atan2(dy, dx);
+      const xRepulsion = Math.cos(angle);
+      const yRepulsion = Math.sin(angle);
+      const radiusDistance = 80 - Util.calculateDistance(mouse, this);
+      this.x += xRepulsion * radiusDistance;
+      this.y += yRepulsion * radiusDistance;
+    }
 
     this.x += this.dx;
     this.y += this.dy;

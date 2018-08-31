@@ -11,8 +11,14 @@ const circleContainer = new Circle(window.innerWidth / 2, window.innerHeight / 2
 window.addEventListener('resize', () => {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
-  // init((canvas.height + canvas.width) / 2.5);
   init(particleNum);
+});
+
+let drawLinesEffect = false;
+window.addEventListener('click', (e) => {
+  if (e.target.id === 'edges') {
+    drawLinesEffect = e.target.checked;
+  }
 });
 
 let particleArray;
@@ -22,9 +28,6 @@ particlesInput.addEventListener('change', () => {
   particleNum = particlesInput.value;
   init(particleNum);
 });
-
-
-
 
 const init = (num) => {
   particleArray = [];
@@ -65,7 +68,9 @@ const animate = () => {
 
   for (var i = 0; i < particleArray.length; i++) {
     particleArray[i].update(circleContainer);
-    drawLines(particleArray[i]);
+    if (drawLinesEffect === true) {
+      drawLines(particleArray[i]);
+    }
   }
 
   // circleContainer.draw();
