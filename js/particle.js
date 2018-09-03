@@ -96,8 +96,6 @@ class Particle {
 
     this.x += this.dx;
     this.y += this.dy;
-    // this.attract(mouse);
-    // this.integrate();
     this.draw();
   }
 
