@@ -10,7 +10,7 @@ window.addEventListener('mousemove', (event) => {
   mouse.y = event.y;
 });
 
-let effects = {bubble: false, repulse: false}
+let effects = {bubble: false, repulse: false, attract: true, detract: false}
 window.addEventListener('click', (e) => {
   if (e.target.type === 'checkbox') {
     effects[e.target.id] = e.target.checked;
@@ -28,6 +28,11 @@ class Particle {
     this.minRadius = radius;
     this.ctx = ctx;
     this.hue = Util.randomIntFromRange(1, 50);
+    this.flag = false;
+    this.ditsanceFromCenter = {
+      x: Util.randomIntFromRange(80, 260),
+      y: Util.randomIntFromRange(80, 260)
+    }
   }
 
   draw() {
@@ -73,6 +78,14 @@ class Particle {
     //   this.dy = -this.dy;
     // }
 
+    if (effects['attract'] === true) {
+      this.attract(mouse);
+      this.integrate();
+    } else if (effects['detract'] === true) {
+      this.detract(mouse);
+      this.integrate();
+    }
+
     if (Util.calculateDistance(mouse, this) < 80 && effects['bubble'] === true) {
       if (this.radius < 25) {
         this.radius += 1.5;
@@ -100,12 +113,12 @@ class Particle {
   }
 
   integrate() {
-    const velocityX = (this.x - this.oldX) * 0.95;
-    const velocityY = (this.y - this.oldY) * 0.95;
+    const velocityX = (this.x - this.oldX);
+    const velocityY = (this.y - this.oldY);
     this.oldX = this.x;
     this.oldY = this.y;
-    this.x += velocityX;
-    this.y += velocityY;
+    this.x += velocityX/3;
+    this.y += velocityY/3;
   }
 
   attract(target) {
@@ -113,13 +126,22 @@ class Particle {
     const dx = target.x - this.x;
     const dy = target.y - this.y;
 
-    if (distance > 20) {
-      this.x += dx / distance;
-      this.y += dy / distance;
+    if (distance > 30) {
+      this.x += 3 * dx / distance;
+      this.y += 3 * dy / distance;
     } else {
-      this.x -= dx * 1.2;
-      this.y -= dy * 1.2;
+      this.x -= dx * 0.75;
+      this.y -= dy * 0.75;
     }
+  }
+
+  detract(target) {
+    const distance = Util.calculateDistance(target, this);
+    const dx = target.x - this.x;
+    const dy = target.y - this.y;
+
+    this.x -= (3 * dx / distance);
+    this.y -= (3 * dy / distance);
   }
 }
 
