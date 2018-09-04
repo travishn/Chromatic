@@ -10,13 +10,28 @@ window.addEventListener('mousemove', (event) => {
   mouse.y = event.y;
 });
 
-let effects = {bubble: false, repulse: false, attract: true, detract: false}
+let effects = {bubble: false, repulse: false}
+
+let animationNum = 0;
+let animations = {1: 'attract', 2: 'detract'}
+
 window.addEventListener('click', (e) => {
   if (e.target.type === 'checkbox') {
     effects[e.target.id] = e.target.checked;
     console.log(e.target.checked);
   }
 });
+
+const canvas = document.getElementById('canvas-container');
+canvas.addEventListener("mouseup", (e) => {
+  e.preventDefault();
+  console.log(animations[animationNum]);
+  if (animationNum === 2) {
+    animationNum = 1;
+  } else {
+    animationNum += 1;
+  }
+})
 
 class Particle {
   constructor(x, y, dx, dy, radius, ctx) {
@@ -78,10 +93,10 @@ class Particle {
     //   this.dy = -this.dy;
     // }
 
-    if (effects['attract'] === true) {
+    if (animations[animationNum] === 'attract') {
       this.attract(mouse);
       this.integrate();
-    } else if (effects['detract'] === true) {
+    } else if (animations[animationNum] === 'detract') {
       this.detract(mouse);
       this.integrate();
     }
