@@ -13,20 +13,22 @@ window.addEventListener('mousemove', (event) => {
 let effects = {bubble: false, repulse: false}
 
 let animationNum = 0;
-let animations = {1: 'attract', 2: 'detract'}
+let animations = {
+  1: 'attract',
+  2: 'drag',
+  3: 'detract',
+}
 
 window.addEventListener('click', (e) => {
   if (e.target.type === 'checkbox') {
     effects[e.target.id] = e.target.checked;
-    console.log(e.target.checked);
   }
 });
 
 const canvas = document.getElementById('canvas-container');
 canvas.addEventListener("mouseup", (e) => {
   e.preventDefault();
-  console.log(animations[animationNum]);
-  if (animationNum === 2) {
+  if (animationNum === 3) {
     animationNum = 1;
   } else {
     animationNum += 1;
@@ -43,11 +45,19 @@ class Particle {
     this.minRadius = radius;
     this.ctx = ctx;
     this.hue = Util.randomIntFromRange(1, 50);
-    this.flag = false;
-    this.ditsanceFromCenter = {
+
+    // particles distance from the center of window view
+    this.distanceFromCenter = {
       x: Util.randomIntFromRange(80, 260),
       y: Util.randomIntFromRange(80, 260)
     }
+
+    this.radians = Math.random() * Math.PI * 2;
+    this.velocity = 0.03;
+    this.lastMouse = {
+      x: x,
+      y: y
+    };
   }
 
   draw() {
@@ -85,17 +95,11 @@ class Particle {
       this.dy = -this.dy;
     }
 
-    // if ((this.x + this.radius > circle.x) || (this.x - this.radius < circle.x)) {
-    //   this.dx = -this.dx;
-    // }
-
-    // if ((this.y + this.radius > circle.y) || (this.y - this.radius < circle.y)) {
-    //   this.dy = -this.dy;
-    // }
-
     if (animations[animationNum] === 'attract') {
       this.attract(mouse);
       this.integrate();
+    } else if (animations[animationNum] === 'drag') {
+      this.drag();
     } else if (animations[animationNum] === 'detract') {
       this.detract(mouse);
       this.integrate();
@@ -157,6 +161,18 @@ class Particle {
 
     this.x -= (3 * dx / distance);
     this.y -= (3 * dy / distance);
+  }
+
+  drag() {
+    this.radians += this.velocity;
+
+    // creates center point for donut shape
+    this.lastMouse.x += (mouse.x - this.lastMouse.x) * 0.05;
+    this.lastMouse.y += (mouse.y - this.lastMouse.y) * 0.05;
+
+    // creates circular shape donut
+    this.x = this.lastMouse.x + Math.cos(this.radians) * this.distanceFromCenter.x;
+    this.y = this.lastMouse.y + Math.sin(this.radians) * this.distanceFromCenter.y;
   }
 }
 

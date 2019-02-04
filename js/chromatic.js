@@ -35,8 +35,6 @@ const init = (num) => {
     const radius = Math.random() * 3 + 3;
     const x = Math.random() * (canvas.width - radius * 2) + radius;
     const y = Math.random() * (canvas.height - radius * 2) + radius;
-    // const x = Util.randomIntFromRange(canvas.width/2 - circleContainer.x, canvas.width/2 + circleContainer.x)
-    // const y = Util.randomIntFromRange(canvas.height/2 - circleContainer.y, canvas.height/2 + circleContainer.y)
     const dx = (Math.random() - 0.5);
     const dy = (Math.random() - 0.5);
 
@@ -72,8 +70,6 @@ const animate = () => {
       drawLines(particleArray[i]);
     }
   }
-
-  // circleContainer.draw();
 }
 
 init(particleNum);
