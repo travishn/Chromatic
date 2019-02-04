@@ -42,8 +42,7 @@ const init = (num) => {
 
 const drawLines = (particleA) => {
   for (let j = 0; j < particleArray.length; j++) {
-    let edgeLimit = particleA.animating ? 40 : 110;
-    edgeLimit = particleA.animating && particleA.animating === 'attract' ? 0 : 40;
+    let edgeLimit = particleA.animating && particleA.animating === 'attract' ? 0 : 40;
 
     const particleB = particleArray[j];
     const distance = Util.calculateDistance(particleA, particleB);
