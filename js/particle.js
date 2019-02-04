@@ -45,6 +45,7 @@ class Particle {
     this.minRadius = radius;
     this.ctx = ctx;
     this.hue = Util.randomIntFromRange(1, 50);
+    this.animating = null;
 
     // particles distance from the center of window view
     this.distanceFromCenter = {
@@ -82,11 +83,14 @@ class Particle {
 
   update() {
     if (animations[animationNum] === 'attract') {
+      this.animating = 'attract';
       this.attract(mouse);
       this.integrate();
     } else if (animations[animationNum] === 'drag') {
+      this.animating = 'drag';
       this.drag();
     } else if (animations[animationNum] === 'detract') {
+      this.animating = 'detract';
       this.check = false;
       this.detract(mouse);
       this.integrate();
