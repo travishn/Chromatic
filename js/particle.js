@@ -10,7 +10,7 @@ window.addEventListener('mousemove', (event) => {
   mouse.y = event.y;
 });
 
-let effects = {bubble: false, repulse: false}
+let effects = {bubble: true, repulse: false}
 
 let animationNum = 0;
 let animations = {
@@ -52,12 +52,15 @@ class Particle {
       y: Util.randomIntFromRange(80, 260)
     }
 
+    // variables required for donut shape effect
     this.radians = Math.random() * Math.PI * 2;
     this.velocity = 0.03;
     this.lastMouse = {
       x: x,
       y: y
     };
+
+    this.check = false;
   }
 
   draw() {
@@ -77,36 +80,20 @@ class Particle {
     this.ctx.closePath();
   }
 
-  update(circle) {
-    if ((this.x + this.radius > innerWidth) || (this.x - this.radius < 0)) {
-      this.dx = -this.dx;
-    }
-    
-    if ((this.y + this.radius > innerHeight) || (this.y - this.radius < 0)) {
-      this.dy = -this.dy;
-    }
-
-    const xDist = this.x - circle.x;
-    const yDist = this.y - circle.y;
-    const radiiSum = this.minRadius + circle.radius;
-    
-    if (xDist * xDist + yDist * yDist === radiiSum * radiiSum) {
-      this.dx = -this.dx;
-      this.dy = -this.dy;
-    }
-
+  update() {
     if (animations[animationNum] === 'attract') {
       this.attract(mouse);
       this.integrate();
     } else if (animations[animationNum] === 'drag') {
       this.drag();
     } else if (animations[animationNum] === 'detract') {
+      this.check = false;
       this.detract(mouse);
       this.integrate();
     }
 
     if (Util.calculateDistance(mouse, this) < 80 && effects['bubble'] === true) {
-      if (this.radius < 25) {
+      if (this.radius < 30) {
         this.radius += 1.5;
       }
     } else {
@@ -124,6 +111,14 @@ class Particle {
       const radiusDistance = 80 - Util.calculateDistance(mouse, this);
       this.x += xRepulsion * radiusDistance;
       this.y += yRepulsion * radiusDistance;
+    }
+
+    if ((this.x + this.radius > innerWidth) || (this.x - this.radius < 0)) {
+      this.dx = -this.dx;
+    }
+
+    if ((this.y + this.radius > innerHeight) || (this.y - this.radius < 0)) {
+      this.dy = -this.dy;
     }
 
     this.x += this.dx;
@@ -166,13 +161,28 @@ class Particle {
   drag() {
     this.radians += this.velocity;
 
-    // creates center point for donut shape
-    this.lastMouse.x += (mouse.x - this.lastMouse.x) * 0.05;
-    this.lastMouse.y += (mouse.y - this.lastMouse.y) * 0.05;
+    // check is used to see whether particles are close enough to activate donut/drag effect
+    if (this.check) {
+      // creates center point for donut shape
+      this.lastMouse.x += (mouse.x - this.lastMouse.x) * 0.05;
+      this.lastMouse.y += (mouse.y - this.lastMouse.y) * 0.05;
+  
+      // pushes particles from the center point to create donut shape
+      this.x = this.lastMouse.x + Math.cos(this.radians) * this.distanceFromCenter.x;
+      this.y = this.lastMouse.y + Math.sin(this.radians) * this.distanceFromCenter.y;
+    } else {
+      // If particle distance is too far, attract it towards center first
+      // Once it hits a distance within 30px, activate donut/drag effect
 
-    // creates circular shape donut
-    this.x = this.lastMouse.x + Math.cos(this.radians) * this.distanceFromCenter.x;
-    this.y = this.lastMouse.y + Math.sin(this.radians) * this.distanceFromCenter.y;
+      // radius restrictor must match the one in bubble effect to generate cool 3d move in effect
+      if ((mouse.x - this.x < 30 && mouse.x - this.x > -30 &&
+        mouse.y - this.y < 30 && mouse.y - this.y > -30)) {
+          this.check = true;
+        } else {
+        this.attract(mouse);
+        this.integrate();
+      }
+    }
   }
 }
 

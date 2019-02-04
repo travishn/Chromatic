@@ -1,12 +1,10 @@
 import Particle from './particle';
-import Circle from './circle';
 import * as Util from './util';
 
 const canvas = document.getElementById('canvas-container');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const ctx = canvas.getContext('2d');
-const circleContainer = new Circle(window.innerWidth / 2, window.innerHeight / 2, ctx);
 
 window.addEventListener('resize', () => {
   canvas.height = window.innerHeight;
@@ -65,7 +63,7 @@ const animate = () => {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   for (var i = 0; i < particleArray.length; i++) {
-    particleArray[i].update(circleContainer);
+    particleArray[i].update();
     if (drawLinesEffect === true) {
       drawLines(particleArray[i]);
     }
