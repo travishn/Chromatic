@@ -1,7 +1,10 @@
+const path = require('path');
+
 module.exports = {
-  entry: "./js/chromatic.js",
+  entry: path.join(__dirname, './js/chromatic.js'),
   output: {
-    filename: "../js/bundle.js"
+    filename: 'bundle.js',
+    path: path.join(__dirname, "./js"),
   },
   module: {
     rules: [{
